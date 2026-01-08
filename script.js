@@ -97,10 +97,13 @@ function addLetter(letter) {
   const tile = document.querySelector(
     `.tile[data-row='${currentRow}'][data-col='${currentCol}']`
   );
+
   tile.textContent = letter;
+  tile.classList.add("filled");
 
   currentCol++;
 }
+
 
 //Allow backspace to delete a letter
 function removeLetter() {
@@ -112,10 +115,14 @@ function removeLetter() {
   const tile = document.querySelector(
     `.tile[data-row='${currentRow}'][data-col='${currentCol}']`
   );
+
   tile.textContent = "";
+  tile.classList.remove("filled");
 }
 
+
 //colouring logic
+
 function checkGuess(guess) {
   const secretLetters = secretWord.split("");
   const guessLetters = guess.split("");
@@ -124,36 +131,52 @@ function checkGuess(guess) {
     `.tile[data-row='${currentRow}']`
   );
 
+  //  Flip animation (row by row)
+  rowTiles.forEach((tile, index) => {
+    setTimeout(() => {
+      tile.classList.add("flip");
+      setTimeout(() => tile.classList.remove("flip"), 200);
+    }, index * 150);
+  });
+
   const letterCount = {};
-
-  for (let letter of secretLetters) {
+  secretLetters.forEach(letter => {
     letterCount[letter] = (letterCount[letter] || 0) + 1;
-  }
-
-  // First pass: greens
-  guessLetters.forEach((letter, index) => {
-    if (letter === secretLetters[index]) {
-      rowTiles[index].classList.add("correct");
-      colorKey(letter, "correct");
-      letterCount[letter]--;
-      guessLetters[index] = null;
-    }
   });
 
-  // Second pass: yellows & grays
-  guessLetters.forEach((letter, index) => {
-    if (letter === null) return;
+  // Delay coloring until flip starts
+  setTimeout(() => {
+    // First pass: greens
+    guessLetters.forEach((letter, index) => {
+      if (letter === secretLetters[index]) {
+        rowTiles[index].classList.add("correct");
+        colorKey(letter, "correct");
+        letterCount[letter]--;
+        guessLetters[index] = null;
+      }
+    });
 
-    if (letterCount[letter] > 0) {
-      rowTiles[index].classList.add("present");
-      colorKey(letter, "present");
-      letterCount[letter]--;
-    } else {
-      rowTiles[index].classList.add("absent");
-      colorKey(letter, "absent");
-    }
-  });
+    // Second pass: yellows & grays
+    guessLetters.forEach((letter, index) => {
+      if (letter === null) return;
+
+      if (letterCount[letter] > 0) {
+        rowTiles[index].classList.add("present");
+        colorKey(letter, "present");
+        letterCount[letter]--;
+      } else {
+        rowTiles[index].classList.add("absent");
+        colorKey(letter, "absent");
+      }
+    });
+  }, rowTiles.length * 150);
 }
+
+
+
+
+
+
 
 //color check with the keyboard
 function colorKey(letter, status) {

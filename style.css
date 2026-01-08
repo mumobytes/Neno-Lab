@@ -21,6 +21,9 @@ h1 {
   margin: 0;
   font-size: 2.5rem;
   letter-spacing: 2px;
+  background: linear-gradient(to right, #22c55e, #facc15);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 main {
@@ -121,4 +124,29 @@ main {
 
 .key.absent {
   background: #334155;
+}
+
+.tile.filled {
+  animation: pop 0.12s ease-in;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.85);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.tile {
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.tile.flip {
+  transform: rotateX(90deg);
+}
+
+.key:active {
+  transform: scale(0.95);
 }
