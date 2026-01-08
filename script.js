@@ -68,6 +68,7 @@ function createBoard() {
 
 createBoard();
 
+
 //Handle values input from the keyboard
 document.addEventListener("keydown", handleKeyPress);
 
@@ -121,12 +122,10 @@ function checkGuess(guess) {
 
   const rowTiles = document.querySelectorAll(
     `.tile[data-row='${currentRow}']`
-
   );
 
   const letterCount = {};
 
-  // Count letters in secret word
   for (let letter of secretLetters) {
     letterCount[letter] = (letterCount[letter] || 0) + 1;
   }
@@ -135,41 +134,59 @@ function checkGuess(guess) {
   guessLetters.forEach((letter, index) => {
     if (letter === secretLetters[index]) {
       rowTiles[index].classList.add("correct");
+      colorKey(letter, "correct");
       letterCount[letter]--;
       guessLetters[index] = null;
     }
   });
 
-  // Second pass: yellows and grays
+  // Second pass: yellows & grays
   guessLetters.forEach((letter, index) => {
     if (letter === null) return;
 
     if (letterCount[letter] > 0) {
       rowTiles[index].classList.add("present");
+      colorKey(letter, "present");
       letterCount[letter]--;
     } else {
       rowTiles[index].classList.add("absent");
+      colorKey(letter, "absent");
     }
   });
+}
 
-  function colorKey(letter, status) {
-  const key = document.querySelector(`.key:not([data-key])[textContent="${letter}"]`);
+//color check with the keyboard
+function colorKey(letter, status) {
+  const key = [...document.querySelectorAll(".key")]
+    .find(k => k.textContent === letter);
+
   if (!key) return;
 
+  // Priority: correct > present > absent
+  if (status === "correct") {
+    key.classList.remove("present", "absent");
+    key.classList.add("correct");
+  }
+
+  if (status === "present" && !key.classList.contains("correct")) {
+    key.classList.remove("absent");
+    key.classList.add("present");
+  }
+
   if (
-    key.classList.contains("correct") ||
-    (key.classList.contains("present") && status === "absent")
-  ) return;
-
-  key.classList.remove("present", "absent");
-  key.classList.add(status);
-}
-
+    status === "absent" &&
+    !key.classList.contains("correct") &&
+    !key.classList.contains("present")
+  ) {
+    key.classList.add("absent");
+  }
 }
 
 
 
 function submitGuess() {
+  if (gameOver) return;
+
   if (currentCol < COLS) {
     showMessage("Andika neno lenye herufi 5");
     return;
@@ -186,54 +203,21 @@ function submitGuess() {
 
   if (guess.toUpperCase() === secretWord) {
     gameOver = true;
-    setTimeout(() => {
-      showMessage("Hongera! Umefanikiwa ", null);
-    }, 100);
+    document.body.classList.add("game-over");
+    showMessage("Hongera! Umefanikiwa ", null);
     return;
   }
 
   currentRow++;
   currentCol = 0;
 
-  checkLoss();
-}
-
-
-
-
-function submitGuess() {
-  if (currentCol < COLS) {
-    showMessage("Andika neno lenye herufi 5");
-    return;
-  }
-
-  const guess = guesses[currentRow].join("").toLowerCase();
-
-  if (!WORDS.includes(guess)) {
-    showMessage("Neno halipo kwenye kamusi");
-    return;
-  }
-
-  checkGuess(guess.toUpperCase());
-
-  if (guess.toUpperCase() === secretWord) {
+  if (currentRow === ROWS) {
     gameOver = true;
-    setTimeout(() => {
-      showMessage("Hongera! Umefanikiwa ", null);
-    }, 100);
-    return;
+    document.body.classList.add("game-over");
+    showMessage(`Umeshindwa Neno lilikuwa: ${secretWord}`, null);
   }
-
-  currentRow++;
-  currentCol = 0;
-
-  checkLoss();
-
-  if (currentRow === ROWS - 1) {
-  checkLoss();
 }
 
-}
 
 
 
@@ -247,4 +231,3 @@ function checkLoss() {
 }
 
 
-document.body.classList.add("game-over");
