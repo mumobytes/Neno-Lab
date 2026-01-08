@@ -18,8 +18,34 @@ if (savedTheme === "light") {
 }
 
 
-const secretWord = WORDS[Math.floor(Math.random() * WORDS.length)].toUpperCase();
-console.log("Secret word:", secretWord);
+//Function to Get Today’s Word
+const START_DATE = new Date("2026-01-01");
+
+function getDailyWord() {
+  const today = new Date();
+  const diffTime = today - START_DATE;
+  const dayIndex = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  const wordIndex = dayIndex % WORDS.length;
+
+  return WORDS[wordIndex].toUpperCase();
+}
+
+const secretWord = getDailyWord();
+console.log("Daily Neno:", secretWord);
+
+
+//Prevent Replay on the Same Day
+const todayKey = new Date().toDateString();
+const lastPlayed = localStorage.getItem("nenolab-last-played");
+
+if (lastPlayed === todayKey) {
+  showMessage("Umeshacheza Neno la Leo", null);
+  gameOver = true;
+} else {
+  localStorage.setItem("nenolab-last-played", todayKey);
+}
+
+
 
 let gameOver = false;
 
@@ -196,7 +222,6 @@ function checkGuess(guess) {
 
 
 
-
 //color check with the keyboard
 function colorKey(letter, status) {
   const key = [...document.querySelectorAll(".key")]
@@ -272,4 +297,9 @@ function checkLoss() {
   }
 }
 
-
+//Notification for more games section
+document.querySelectorAll(".future-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    showMessage("Hii itakuja hivi karibuni 👀", 2000);
+  });
+});
