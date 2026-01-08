@@ -1,4 +1,23 @@
 
+const themeToggle = document.getElementById("theme-toggle");
+
+themeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("light");
+
+  const isLight = document.body.classList.contains("light");
+  themeToggle.textContent = isLight ? "Light mode" : "Dark mode";
+
+  localStorage.setItem("nenolab-theme", isLight ? "light" : "dark");
+});
+
+const savedTheme = localStorage.getItem("nenolab-theme");
+
+if (savedTheme === "light") {
+  document.body.classList.add("light");
+  themeToggle.textContent = "Light";
+}
+
+
 const secretWord = WORDS[Math.floor(Math.random() * WORDS.length)].toUpperCase();
 console.log("Secret word:", secretWord);
 

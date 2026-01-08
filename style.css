@@ -3,9 +3,26 @@
   font-family: "Segoe UI", sans-serif;
 }
 
+:root {
+  --bg-color: #0f172a;
+  --text-color: #e5e7eb;
+  --tile-border: #334155;
+  --tile-empty: transparent;
+  --key-bg: #1e293b;
+}
+
+body.light {
+  --bg-color: #f8fafc;
+  --text-color: #0f172a;
+  --tile-border: #cbd5e1;
+  --tile-empty: transparent;
+  --key-bg: #e5e7eb;
+}
+
+
 body {
-  background: #0f172a;
-  color: #e5e7eb;
+  background: var(--bg-color);
+  color: var(--text-color);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,6 +32,17 @@ body {
 header {
   text-align: center;
   margin: 20px 0;
+}
+
+#theme-toggle {
+  margin-top: 10px;
+  background: none;
+  border: 1px solid var(--tile-border);
+  color: var(--text-color);
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
 }
 
 h1 {
@@ -48,7 +76,7 @@ main {
 .tile {
   width: 60px;
   height: 60px;
-  border: 2px solid #334155;
+  border: 2px solid var(--tile-border);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,7 +108,9 @@ main {
   min-height: 24px;
   margin-bottom: 10px;
   font-size: 1rem;
-  color: #f8fafc;
+  color: var(--text-color);
+  opacity: 0.9;
+  font-weight: 500;
 }
 
 .game-over .tile {
@@ -101,8 +131,8 @@ main {
 }
 
 .key {
-  background: #1e293b;
-  color: white;
+  background: var(--key-bg);
+  color: var(--text-color);
   border: none;
   border-radius: 6px;
   padding: 12px;
