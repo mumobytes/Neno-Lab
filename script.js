@@ -1,22 +1,34 @@
 /* =========================
    THEME TOGGLE
 ========================= */
-const themeToggle = document.getElementById("theme-toggle");
+const darkToggle = document.getElementById("dark-toggle");
+const themeIcon = document.getElementById("theme-icon");
 
-themeToggle.addEventListener("click", () => {
-  document.body.classList.toggle("light");
+// sync toggle with current theme
+darkToggle.checked = !document.body.classList.contains("light");
 
-  const isLight = document.body.classList.contains("light");
-  themeToggle.textContent = isLight ? "Light mode" : "Dark mode";
-
-  localStorage.setItem("nenolab-theme", isLight ? "light" : "dark");
+darkToggle.addEventListener("change", () => {
+  document.body.classList.toggle("light", !darkToggle.checked);
+  localStorage.setItem(
+    "nenolab-theme",
+    darkToggle.checked ? "dark" : "light"
+  );
 });
 
-const savedTheme = localStorage.getItem("nenolab-theme");
-if (savedTheme === "light") {
-  document.body.classList.add("light");
-  themeToggle.textContent = "Light mode";
-}
+//Placeholder toggles
+themeIcon.addEventListener("click", () => {
+  darkToggle.checked = !darkToggle.checked;
+  darkToggle.dispatchEvent(new Event("change"));
+});
+
+document.getElementById("mode-toggle").addEventListener("change", () => {
+  console.log("Mode toggle changed (future feature)");
+});
+
+document.getElementById("contrast-toggle").addEventListener("change", () => {
+  console.log("Contrast toggle changed (future feature)");
+});
+
 
 const landingOverlay = document.getElementById("landing-overlay");
 const landingTitle = document.getElementById("landing-title");
@@ -30,6 +42,8 @@ const howToBtn = document.getElementById("how-to-play-btn");
 const howPopup = document.getElementById("how-to-play-popup");
 const howClose = document.getElementById("how-close");
 const hasSeenIntro = localStorage.getItem("nenolab-intro");
+let gameEnabled = false;
+
 const userEmail = localStorage.getItem("nenolab-user-email"); // future login
 
 
@@ -43,6 +57,7 @@ function showLanding() {
   if (lastPlayed === todayKey) {
     landingOverlay.style.display = "none";
     document.body.style.overflow = "";
+    gameEnabled = false;
     return;
   }
 
@@ -50,17 +65,17 @@ function showLanding() {
   landingOverlay.style.display = "flex";
 
   if (!hasSeenIntro) {
-    // 🆕 First-time user
-    landingTitle.textContent = "Karibu NenoLab 👋";
+    // First-time user
+    landingTitle.textContent = "Karibu NenoLab ";
     landingSubtitle.textContent = "Jifunze na ucheze fumbo la maneno ya Kiswahili";
 
     exampleSection.classList.remove("hidden");
     howToBtn.classList.remove("hidden");
     userIdentity.classList.add("hidden");
   } else {
-    // 🔁 Returning user
-    landingTitle.textContent = "Karibu tena 👋";
-    landingSubtitle.textContent = "Neno la Leo lipo tayari";
+    // Returning user
+    landingTitle.textContent = "Karibu tena ";
+    landingSubtitle.textContent = "Hongera!! Ushalipata neno la leo!";
 
     exampleSection.classList.add("hidden");
     howToBtn.classList.add("hidden");
@@ -79,6 +94,8 @@ startGameBtn.addEventListener("click", () => {
   localStorage.setItem("nenolab-intro", "true");
   landingOverlay.style.display = "none";
   document.body.style.overflow = "";
+
+  gameEnabled = true;
 });
 
 //Button behaviors
@@ -95,6 +112,19 @@ howToBtn.addEventListener("click", () => {
 
 howClose.addEventListener("click", () => {
   howPopup.classList.add("hidden");
+});
+
+//Navbar 
+const menuBtn = document.getElementById("menu-btn");
+const settingsPanel = document.getElementById("settings-panel");
+const settingsClose = document.getElementById("settings-close");
+
+menuBtn.addEventListener("click", () => {
+  settingsPanel.classList.remove("hidden");
+});
+
+settingsClose.addEventListener("click", () => {
+  settingsPanel.classList.add("hidden");
 });
 
 
@@ -199,7 +229,7 @@ const todayKey = new Date().toDateString();
 const lastPlayed = localStorage.getItem("nenolab-last-played");
 
 if (lastPlayed === todayKey) {
-  showMessage("Umemaliza Neno la Leo. Rudi kesho 🌅", null);
+  showMessage("Umemaliza Neno la Leo. Rudi kesho ", null);
   gameOver = true;
 } else {
   localStorage.setItem("nenolab-last-played", todayKey);
@@ -224,7 +254,7 @@ const keys = document.querySelectorAll(".key");
 
 keys.forEach(key => {
   key.addEventListener("click", () => {
-    if (gameOver) return;
+    if (!gameEnabled || gameOver) return;
 
     const value = key.dataset.key || key.textContent;
     if (value === "ENTER") submitGuess();
@@ -234,7 +264,7 @@ keys.forEach(key => {
 });
 
 document.addEventListener("keydown", e => {
-  if (gameOver) return;
+  if (!gameEnabled || gameOver) return;
 
   const key = e.key.toUpperCase();
   if (key === "BACKSPACE") removeLetter();
@@ -409,7 +439,7 @@ function submitGuess() {
   currentRow++;
   currentCol = 0;
 
-  // ❌ LOSS
+  //  LOSS
   if (currentRow === ROWS) {
     gameOver = true;
     document.body.classList.add("game-over");
@@ -431,6 +461,10 @@ document.querySelectorAll(".future-btn").forEach(btn => {
     showMessage("Hii itakuja hivi karibuni 👀", 2000);
   });
 });
+
+if (hasSeenIntro && !gameOver) {
+  gameEnabled = true;
+}
 
 
 showLanding();

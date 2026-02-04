@@ -8,6 +8,23 @@
 </head>
 <body>
 
+  <nav class="navbar">
+    <div class="nav-left">
+      <span class="app-name">NenoLab</span>
+    </div>
+
+    <div class="nav-right">
+      <button id="theme-icon" class="icon-btn" aria-label="Toggle theme">
+        💡
+      </button>
+
+      <button id="menu-btn" class="icon-btn" aria-label="Menu">
+        ☰
+      </button>
+    </div>
+  </nav>
+
+
   <header>
     <h1>NenoLab</h1>
     <p>Fumbo la maneno ya Kiswahili</p>
@@ -128,11 +145,20 @@
           </div>
         </div>
 
-        <p class="example-text">
-          🟩 Sahihi  
-          🟨 Ipo  
-          ⬜ Haipo
-        </p>
+        <div class="legend">
+          <div class="legend-item">
+            <span class="legend-box correct"></span>
+            <span>Sahihi</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-box present"></span>
+            <span>Ipo</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-box absent"></span>
+            <span>Haipo</span>
+          </div>
+        </div>
       </div>
 
       <!-- User identity (shown for returning users) -->
@@ -147,21 +173,59 @@
   </div>
 
   <div id="how-to-play-popup" class="popup hidden">
-  <div class="popup-content">
-    <h2 class="popup-title">Jinsi ya Kucheza</h2>
+    <div class="popup-content">
+      <h2 class="popup-title">Jinsi ya Kucheza</h2>
 
-    <ul class="how-to-list">
-      <li>🔤 Andika neno lenye herufi 5</li>
-      <li>⌨️ Bonyeza ENTER kuthibitisha</li>
-      <li>🟩 Herufi sahihi na mahali sahihi</li>
-      <li>🟨 Herufi ipo lakini si mahali sahihi</li>
-      <li>⬜ Herufi haipo kwenye neno</li>
-      <li>🎯 Una nafasi 6 tu</li>
-    </ul>
+      <ul class="how-to-list">
+        <li>🔤 Andika neno lenye herufi 5</li>
+        <li>⌨️ Bonyeza ENTER kuthibitisha</li>
+        <li>🟩 Herufi sahihi na mahali sahihi</li>
+        <li>🟨 Herufi ipo lakini si mahali sahihi</li>
+        <li>⬜ Herufi haipo kwenye neno</li>
+        <li>🎯 Una nafasi 6 tu</li>
+      </ul>
 
-    <button id="how-close" class="primary-btn">Sawa</button>
+      <button id="how-close" class="primary-btn">Sawa</button>
+    </div>
   </div>
-</div>
+
+    <p class="micro-copy">
+      Cheza kila siku • 🔥 Endeleza streak yako
+    </p>
+
+    <div id="settings-panel" class="settings hidden">
+      <div class="settings-content">
+        <h3 class="settings-title">Mipangilio</h3>
+
+        <div class="setting-item">
+          <span>🌙 Dark Mode</span>
+          <label class="switch">
+            <input type="checkbox" id="dark-toggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <span>🎮 Mode</span>
+          <label class="switch">
+            <input type="checkbox" id="mode-toggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <span>🎨 High Contrast</span>
+          <label class="switch">
+            <input type="checkbox" id="contrast-toggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <button id="settings-close" class="settings-close">Funga</button>
+      </div>
+    </div>
+
+
 
 
     <script src="words.js"></script>
