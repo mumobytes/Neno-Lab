@@ -91,20 +91,22 @@ main {
 
 
 .correct {
-  background-color: #16a34a;
-  border-color: #16a34a;
+  background-color: #14b8a6;
+  border-color: #14b8a6;
   color: white;
+  box-shadow: 0 0 0 1px rgba(20,184,166,0.4),
+              0 6px 14px rgba(20,184,166,0.35);
 }
 
 .present {
-  background-color: #ca8a04;
-  border-color: #ca8a04;
+  background-color: #8b5cf6;
+  border-color: #8b5cf6;
   color: white;
 }
 
 .absent {
-  background-color: #334155;
-  border-color: #334155;
+  background-color: #1f2937;
+  border-color: #1f2937;
   color: white;
 }
 
@@ -149,15 +151,15 @@ main {
 }
 
 .key.correct {
-  background: #16a34a;
+  background:  #14b8a6;
 }
 
 .key.present {
-  background: #ca8a04;
+  background:  #8b5cf6;
 }
 
 .key.absent {
-  background: #334155;
+  background: #1f2937;
 }
 
 .tile.filled {
@@ -346,20 +348,41 @@ main {
 }
 
 /* Landing overlay */
+
 .overlay {
   position: fixed;
   inset: 0;
-  background: var(--bg-color);
+  background: rgba(248, 250, 252, 0.75); 
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 2000;
 }
 
+/* Dark mode tuning */
+body:not(.light) .overlay {
+  background: rgba(15, 23, 42, 0.75); 
+}
+
+
 .overlay-content {
   text-align: center;
   padding: 24px;
   max-width: 360px;
+  animation: fadeUp 0.4s ease
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .overlay-title {
