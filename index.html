@@ -18,6 +18,9 @@
 
 
   </header>
+  
+
+
 
   <main>
     <div id="board"></div>
@@ -66,17 +69,47 @@
       <p class="end-title">Umemaliza Neno la Leo!!</p>
       <p class="end-subtitle">Rudi kesho kwa fumbo jipya</p>
 
-  <div class="end-actions">
-    <button class="future-btn">Practice Mode</button>
-    <button class="future-btn">More Games</button>
+      <div class="end-actions">
+        <button class="future-btn">Practice Mode</button>
+        <button class="future-btn">More Games</button>
+      </div>
+    </div>
+
+    <div id="stats-popup" class="popup hidden">
+      <div class="popup-content">
+        <h2 class="popup-title">Takwimu Zako</h2>
+
+        <div class="stats-summary">
+          <div>
+            <p class="stat-label">Current Streak</p>
+            <p class="stat-value" id="current-streak">0</p>
+          </div>
+          <div>
+            <p class="stat-label">Longest Streak</p>
+            <p class="stat-value" id="max-streak">0</p>
+          </div>
+        </div>
+
+        <div class="distribution">
+          <p class="dist-title">Guess Distribution</p>
+          <div id="distribution-bars"></div>
+        </div>
+
+        <button id="stats-close">Funga</button>
+      </div>
+    </div>
+
+
+  </main>
+  <div id="win-popup" class="popup hidden">
+  <div class="popup-content">
+    <h2 class="popup-title">Hongera! </h2>
+    <p class="popup-text">Umeipata Neno la Leo!</p>
+    <p class="popup-streak">Streak: <span id="streak-count">0</span> 🔥</p>
+
+    <button id="popup-close">Funga</button>
   </div>
 </div>
-
-
-
-
-    
-  </main>
     <script src="words.js"></script>
     <script src="script.js"></script>
 

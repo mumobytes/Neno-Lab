@@ -1,4 +1,6 @@
-
+/* =========================
+   THEME TOGGLE
+========================= */
 const themeToggle = document.getElementById("theme-toggle");
 
 themeToggle.addEventListener("click", () => {
@@ -11,58 +13,132 @@ themeToggle.addEventListener("click", () => {
 });
 
 const savedTheme = localStorage.getItem("nenolab-theme");
-
 if (savedTheme === "light") {
   document.body.classList.add("light");
-  themeToggle.textContent = "Light";
+  themeToggle.textContent = "Light mode";
 }
 
+/* =========================
+   STATS ENGINE
+========================= */
+function getStats() {
+  return JSON.parse(localStorage.getItem("nenolab-stats")) || {
+    gamesPlayed: 0,
+    wins: 0,
+    currentStreak: 0,
+    maxStreak: 0,
+    distribution: [0, 0, 0, 0, 0, 0]
+  };
+}
 
-//Function to Get Today’s Word
+function saveStats(stats) {
+  localStorage.setItem("nenolab-stats", JSON.stringify(stats));
+}
+
+/* =========================
+   STATS POPUP
+========================= */
+const statsPopup = document.getElementById("stats-popup");
+const statsClose = document.getElementById("stats-close");
+
+const currentStreakEl = document.getElementById("current-streak");
+const maxStreakEl = document.getElementById("max-streak");
+const distributionBars = document.getElementById("distribution-bars");
+
+function showStatsPopup(stats) {
+  currentStreakEl.textContent = stats.currentStreak;
+  maxStreakEl.textContent = stats.maxStreak;
+
+  distributionBars.innerHTML = "";
+
+  const maxCount = Math.max(...stats.distribution, 1);
+
+  stats.distribution.forEach((count, index) => {
+    const row = document.createElement("div");
+    row.className = "dist-row";
+
+    const label = document.createElement("span");
+    label.textContent = index + 1;
+
+    const bar = document.createElement("div");
+    bar.className = "dist-bar";
+    bar.style.width = `${(count / maxCount) * 100}%`;
+
+    row.appendChild(label);
+    row.appendChild(bar);
+    distributionBars.appendChild(row);
+  });
+
+  statsPopup.classList.remove("hidden");
+}
+
+statsClose.addEventListener("click", () => {
+  statsPopup.classList.add("hidden");
+});
+
+/* =========================
+   WIN POPUP
+========================= */
+const winPopup = document.getElementById("win-popup");
+const streakDisplay = document.getElementById("streak-count");
+const popupClose = document.getElementById("popup-close");
+
+function showWinPopup(streak) {
+  streakDisplay.textContent = streak;
+  winPopup.classList.remove("hidden");
+}
+
+popupClose.addEventListener("click", () => {
+  winPopup.classList.add("hidden");
+});
+
+/* =========================
+   DAILY WORD SYSTEM
+========================= */
 const START_DATE = new Date("2026-01-01");
 
 function getDailyWord() {
   const today = new Date();
-  const diffTime = today - START_DATE;
-  const dayIndex = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  const wordIndex = dayIndex % WORDS.length;
-
-  return WORDS[wordIndex].toUpperCase();
+  const diffDays = Math.floor(
+    (today - START_DATE) / (1000 * 60 * 60 * 24)
+  );
+  const index = diffDays % WORDS.length;
+  return WORDS[index].toUpperCase();
 }
 
 const secretWord = getDailyWord();
 console.log("Daily Neno:", secretWord);
 
+/* =========================
+   PREVENT REPLAY SAME DAY
+========================= */
+let gameOver = false;
 
-//Prevent Replay on the Same Day
 const todayKey = new Date().toDateString();
 const lastPlayed = localStorage.getItem("nenolab-last-played");
 
 if (lastPlayed === todayKey) {
-  showMessage("Umeshacheza Neno la Leo", null);
+  showMessage("Umemaliza Neno la Leo. Rudi kesho 🌅", null);
   gameOver = true;
 } else {
   localStorage.setItem("nenolab-last-played", todayKey);
 }
 
-
-
-let gameOver = false;
-
+/* =========================
+   MESSAGE SYSTEM
+========================= */
 const messageEl = document.getElementById("message");
 
 function showMessage(text, duration = 2000) {
   messageEl.textContent = text;
-
   if (duration) {
-    setTimeout(() => {
-      messageEl.textContent = "";
-    }, duration);
+    setTimeout(() => (messageEl.textContent = ""), duration);
   }
 }
 
-
-//Keyboard funtionality
+/* =========================
+   KEYBOARD INPUT
+========================= */
 const keys = document.querySelectorAll(".key");
 
 keys.forEach(key => {
@@ -70,30 +146,33 @@ keys.forEach(key => {
     if (gameOver) return;
 
     const value = key.dataset.key || key.textContent;
-
     if (value === "ENTER") submitGuess();
     else if (value === "BACKSPACE") removeLetter();
     else addLetter(value);
   });
 });
 
+document.addEventListener("keydown", e => {
+  if (gameOver) return;
 
+  const key = e.key.toUpperCase();
+  if (key === "BACKSPACE") removeLetter();
+  else if (key === "ENTER") submitGuess();
+  else if (/^[A-Z]$/.test(key)) addLetter(key);
+});
 
-//Type of game(the tiles)
+/* =========================
+   BOARD SETUP
+========================= */
 const ROWS = 6;
 const COLS = 5;
 
 let currentRow = 0;
 let currentCol = 0;
 
-// Stores guesses as 2D array
-let guesses = Array.from({ length: ROWS }, () =>
-  Array(COLS).fill("")
-);
-
+let guesses = Array.from({ length: ROWS }, () => Array(COLS).fill(""));
 const board = document.getElementById("board");
 
-//Creating a grid
 function createBoard() {
   for (let r = 0; r < ROWS; r++) {
     const row = document.createElement("div");
@@ -102,55 +181,32 @@ function createBoard() {
     for (let c = 0; c < COLS; c++) {
       const tile = document.createElement("div");
       tile.classList.add("tile");
-      tile.setAttribute("data-row", r);
-      tile.setAttribute("data-col", c);
+      tile.dataset.row = r;
+      tile.dataset.col = c;
       row.appendChild(tile);
     }
-
     board.appendChild(row);
   }
 }
 
 createBoard();
 
-
-//Handle values input from the keyboard
-document.addEventListener("keydown", handleKeyPress);
-
-function handleKeyPress(e) {
-  if (gameOver) return;
-
-  const key = e.key.toUpperCase();
-
-  if (key === "BACKSPACE") {
-    removeLetter();
-  } else if (key === "ENTER") {
-    submitGuess();
-  } else if (/^[A-Z]$/.test(key)) {
-    addLetter(key);
-  }
-}
-
-
-
-//Add the letters picked into the tiles
+/* =========================
+   LETTER INPUT
+========================= */
 function addLetter(letter) {
   if (currentCol >= COLS) return;
 
   guesses[currentRow][currentCol] = letter;
-
   const tile = document.querySelector(
     `.tile[data-row='${currentRow}'][data-col='${currentCol}']`
   );
 
   tile.textContent = letter;
   tile.classList.add("filled");
-
   currentCol++;
 }
 
-
-//Allow backspace to delete a letter
 function removeLetter() {
   if (currentCol === 0) return;
 
@@ -165,82 +221,65 @@ function removeLetter() {
   tile.classList.remove("filled");
 }
 
-
-//colouring logic
-
+/* =========================
+   CHECK GUESS + COLORS
+========================= */
 function checkGuess(guess) {
   const secretLetters = secretWord.split("");
   const guessLetters = guess.split("");
-
   const rowTiles = document.querySelectorAll(
     `.tile[data-row='${currentRow}']`
   );
 
-  //  Flip animation (row by row)
-  rowTiles.forEach((tile, index) => {
+  rowTiles.forEach((tile, i) => {
     setTimeout(() => {
       tile.classList.add("flip");
       setTimeout(() => tile.classList.remove("flip"), 200);
-    }, index * 150);
+    }, i * 150);
   });
 
   const letterCount = {};
-  secretLetters.forEach(letter => {
-    letterCount[letter] = (letterCount[letter] || 0) + 1;
-  });
+  secretLetters.forEach(l => (letterCount[l] = (letterCount[l] || 0) + 1));
 
-  // Delay coloring until flip starts
   setTimeout(() => {
-    // First pass: greens
-    guessLetters.forEach((letter, index) => {
-      if (letter === secretLetters[index]) {
-        rowTiles[index].classList.add("correct");
-        colorKey(letter, "correct");
-        letterCount[letter]--;
-        guessLetters[index] = null;
+    guessLetters.forEach((l, i) => {
+      if (l === secretLetters[i]) {
+        rowTiles[i].classList.add("correct");
+        colorKey(l, "correct");
+        letterCount[l]--;
+        guessLetters[i] = null;
       }
     });
 
-    // Second pass: yellows & grays
-    guessLetters.forEach((letter, index) => {
-      if (letter === null) return;
-
-      if (letterCount[letter] > 0) {
-        rowTiles[index].classList.add("present");
-        colorKey(letter, "present");
-        letterCount[letter]--;
+    guessLetters.forEach((l, i) => {
+      if (!l) return;
+      if (letterCount[l] > 0) {
+        rowTiles[i].classList.add("present");
+        colorKey(l, "present");
+        letterCount[l]--;
       } else {
-        rowTiles[index].classList.add("absent");
-        colorKey(letter, "absent");
+        rowTiles[i].classList.add("absent");
+        colorKey(l, "absent");
       }
     });
   }, rowTiles.length * 150);
 }
 
-
-
-
-
-
-//color check with the keyboard
 function colorKey(letter, status) {
-  const key = [...document.querySelectorAll(".key")]
-    .find(k => k.textContent === letter);
-
+  const key = [...document.querySelectorAll(".key")].find(
+    k => k.textContent === letter
+  );
   if (!key) return;
 
-  // Priority: correct > present > absent
   if (status === "correct") {
     key.classList.remove("present", "absent");
     key.classList.add("correct");
-  }
-
-  if (status === "present" && !key.classList.contains("correct")) {
-    key.classList.remove("absent");
+  } else if (
+    status === "present" &&
+    !key.classList.contains("correct")
+  ) {
     key.classList.add("present");
-  }
-
-  if (
+  } else if (
     status === "absent" &&
     !key.classList.contains("correct") &&
     !key.classList.contains("present")
@@ -249,8 +288,9 @@ function colorKey(letter, status) {
   }
 }
 
-
-
+/* =========================
+   SUBMIT GUESS
+========================= */
 function submitGuess() {
   if (gameOver) return;
 
@@ -260,44 +300,51 @@ function submitGuess() {
   }
 
   const guess = guesses[currentRow].join("").toLowerCase();
-
   if (!WORDS.includes(guess)) {
     showMessage("Neno halipo kwenye kamusi");
     return;
   }
 
   checkGuess(guess.toUpperCase());
+  const stats = getStats();
 
+  // WIN
   if (guess.toUpperCase() === secretWord) {
     gameOver = true;
     document.body.classList.add("game-over");
-    showMessage("Hongera! Umefanikiwa ", null);
+
+    stats.gamesPlayed++;
+    stats.wins++;
+    stats.currentStreak++;
+    stats.maxStreak = Math.max(stats.maxStreak, stats.currentStreak);
+    stats.distribution[currentRow]++;
+
+    saveStats(stats);
+    showWinPopup(stats.currentStreak);
+    showStatsPopup(stats);
     return;
   }
 
   currentRow++;
   currentCol = 0;
 
+  // ❌ LOSS
   if (currentRow === ROWS) {
     gameOver = true;
     document.body.classList.add("game-over");
-    showMessage(`Umeshindwa Neno lilikuwa: ${secretWord}`, null);
+
+    stats.gamesPlayed++;
+    stats.currentStreak = 0;
+
+    saveStats(stats);
+    showStatsPopup(stats);
+    showMessage(`Umeshindwa. Neno lilikuwa: ${secretWord}`, null);
   }
 }
 
-
-
-
-function checkLoss() {
-  if (currentRow === ROWS) {
-    gameOver = true;
-    setTimeout(() => {
-      showMessage(`Umeshindwa  Neno lilikuwa: ${secretWord}`, null);
-    }, 100);
-  }
-}
-
-//Notification for more games section
+/* =========================
+   FUTURE BUTTONS
+========================= */
 document.querySelectorAll(".future-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     showMessage("Hii itakuja hivi karibuni 👀", 2000);
