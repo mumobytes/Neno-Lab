@@ -344,3 +344,115 @@ main {
   margin-left: 8px;
   transition: width 0.3s ease;
 }
+
+/* Landing overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.overlay-content {
+  text-align: center;
+  padding: 24px;
+  max-width: 360px;
+}
+
+.overlay-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.overlay-subtitle {
+  opacity: 0.8;
+  margin-bottom: 20px;
+}
+
+/* Example board */
+.example-board {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.example-row {
+  display: flex;
+  gap: 6px;
+}
+
+.ex {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: white;
+}
+
+.ex.correct {
+  background: #16a34a;
+}
+
+.ex.present {
+  background: #ca8a04;
+}
+
+.ex.absent {
+  background: #334155;
+}
+
+.example-text {
+  font-size: 0.85rem;
+  margin-bottom: 20px;
+  opacity: 0.9;
+}
+
+/* Buttons */
+.overlay-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.primary-btn {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(to right, #22c55e, #facc15);
+  color: #0f172a;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.secondary-btn {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--tile-border);
+  background: none;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.how-to-list {
+  text-align: left;
+  font-size: 0.9rem;
+  margin: 16px 0;
+}
+
+.how-to-list li {
+  margin-bottom: 8px;
+}
+
+
+.user-identity {
+  margin: 12px 0;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}

@@ -18,6 +18,87 @@ if (savedTheme === "light") {
   themeToggle.textContent = "Light mode";
 }
 
+const landingOverlay = document.getElementById("landing-overlay");
+const landingTitle = document.getElementById("landing-title");
+const landingSubtitle = document.getElementById("landing-subtitle");
+const exampleSection = document.getElementById("example-section");
+const userIdentity = document.getElementById("user-identity");
+
+const startGameBtn = document.getElementById("start-game-btn");
+const howToBtn = document.getElementById("how-to-play-btn");
+
+const howPopup = document.getElementById("how-to-play-popup");
+const howClose = document.getElementById("how-close");
+const hasSeenIntro = localStorage.getItem("nenolab-intro");
+const userEmail = localStorage.getItem("nenolab-user-email"); // future login
+
+
+//Landing page
+function showLanding() {
+
+  const todayKey = new Date().toDateString();
+  const lastPlayed = localStorage.getItem("nenolab-last-played");
+
+  // If already played today → skip landing entirely
+  if (lastPlayed === todayKey) {
+    landingOverlay.style.display = "none";
+    document.body.style.overflow = "";
+    return;
+  }
+
+  document.body.style.overflow = "hidden";
+  landingOverlay.style.display = "flex";
+
+  if (!hasSeenIntro) {
+    // 🆕 First-time user
+    landingTitle.textContent = "Karibu NenoLab 👋";
+    landingSubtitle.textContent = "Jifunze na ucheze fumbo la maneno ya Kiswahili";
+
+    exampleSection.classList.remove("hidden");
+    howToBtn.classList.remove("hidden");
+    userIdentity.classList.add("hidden");
+  } else {
+    // 🔁 Returning user
+    landingTitle.textContent = "Karibu tena 👋";
+    landingSubtitle.textContent = "Neno la Leo lipo tayari";
+
+    exampleSection.classList.add("hidden");
+    howToBtn.classList.add("hidden");
+
+    if (userEmail) {
+      userIdentity.textContent = `Umeingia kama ${userEmail}`;
+      userIdentity.classList.remove("hidden");
+    } else {
+      userIdentity.textContent = "Unaendelea kama mgeni";
+      userIdentity.classList.remove("hidden");
+    }
+  }
+}
+//Start Game Action
+startGameBtn.addEventListener("click", () => {
+  localStorage.setItem("nenolab-intro", "true");
+  landingOverlay.style.display = "none";
+  document.body.style.overflow = "";
+});
+
+//Button behaviors
+
+startGameBtn.addEventListener("click", () => {
+  localStorage.setItem("nenolab-intro", "true");
+  landingOverlay.style.display = "none";
+  document.body.style.overflow = "";
+});
+
+howToBtn.addEventListener("click", () => {
+  howPopup.classList.remove("hidden");
+});
+
+howClose.addEventListener("click", () => {
+  howPopup.classList.add("hidden");
+});
+
+
+
 /* =========================
    STATS ENGINE
 ========================= */
@@ -350,3 +431,6 @@ document.querySelectorAll(".future-btn").forEach(btn => {
     showMessage("Hii itakuja hivi karibuni 👀", 2000);
   });
 });
+
+
+showLanding();
