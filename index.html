@@ -4,7 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NenoLab</title>
-  <link rel="stylesheet" href="style.css" />
+
+  
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/navbar.css" />
+  <link rel="stylesheet" href="css/board.css" />
+  <link rel="stylesheet" href="css/keyboard.css" />
+  <link rel="stylesheet" href="css/popups.css" />
+  <link rel="stylesheet" href="css/landing.css" />
+  <link rel="stylesheet" href="css/settings.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+
 </head>
 <body>
 
@@ -24,97 +35,94 @@
     </div>
   </nav>
 
-
-  <header>
-    <h1>NenoLab</h1>
-    <p>Fumbo la maneno ya Kiswahili</p>
-
-    <button id="theme-toggle">Dark mode</button>
-
-    <p class="daily-label">Neno la Leo</p>
+  <div class="container">
+    <header>
+      <p class="daily-label">Neno la Leo</p>
+    </header>
 
 
-  </header>
+    <main>
+      <div id="board"></div>
+      <div id="message"></div>
 
-  <main>
-    <div id="board"></div>
-    <div id="message"></div>
-
-    <div id="keyboard">
-      <div class="key-row">
-        <button class="key">Q</button>
-        <button class="key">W</button>
-        <button class="key">E</button>
-        <button class="key">R</button>
-        <button class="key">T</button>
-        <button class="key">Y</button>
-        <button class="key">U</button>
-        <button class="key">I</button>
-        <button class="key">O</button>
-        <button class="key">P</button>
-      </div>
-
-      <div class="key-row">
-        <button class="key">A</button>
-        <button class="key">S</button>
-        <button class="key">D</button>
-        <button class="key">F</button>
-        <button class="key">G</button>
-        <button class="key">H</button>
-        <button class="key">J</button>
-        <button class="key">K</button>
-        <button class="key">L</button>
-      </div>
-
-      <div class="key-row">
-        <button class="key wide" data-key="ENTER">ENTER</button>
-        <button class="key">Z</button>
-        <button class="key">X</button>
-        <button class="key">C</button>
-        <button class="key">V</button>
-        <button class="key">B</button>
-        <button class="key">N</button>
-        <button class="key">M</button>
-        <button class="key wide" data-key="BACKSPACE">⌫</button>
-      </div>
-    </div>
-
-    <div id="end-panel" class="hidden">
-      <p class="end-title">Umemaliza Neno la Leo!!</p>
-      <p class="end-subtitle">Rudi kesho kwa fumbo jipya</p>
-
-      <div class="end-actions">
-        <button class="future-btn">Practice Mode</button>
-        <button class="future-btn">More Games</button>
-      </div>
-    </div>
-
-    <div id="stats-popup" class="popup hidden">
-      <div class="popup-content">
-        <h2 class="popup-title">Takwimu Zako</h2>
-
-        <div class="stats-summary">
-          <div>
-            <p class="stat-label">Current Streak</p>
-            <p class="stat-value" id="current-streak">0</p>
-          </div>
-          <div>
-            <p class="stat-label">Longest Streak</p>
-            <p class="stat-value" id="max-streak">0</p>
-          </div>
+      <div id="keyboard">
+        <div class="key-row">
+          <button class="key">Q</button>
+          <button class="key">W</button>
+          <button class="key">E</button>
+          <button class="key">R</button>
+          <button class="key">T</button>
+          <button class="key">Y</button>
+          <button class="key">U</button>
+          <button class="key">I</button>
+          <button class="key">O</button>
+          <button class="key">P</button>
         </div>
 
-        <div class="distribution">
-          <p class="dist-title">Guess Distribution</p>
-          <div id="distribution-bars"></div>
+        <div class="key-row">
+          <button class="key">A</button>
+          <button class="key">S</button>
+          <button class="key">D</button>
+          <button class="key">F</button>
+          <button class="key">G</button>
+          <button class="key">H</button>
+          <button class="key">J</button>
+          <button class="key">K</button>
+          <button class="key">L</button>
         </div>
 
-        <button id="stats-close">Funga</button>
+        <div class="key-row">
+          <button class="key wide" data-key="ENTER">ENTER</button>
+          <button class="key">Z</button>
+          <button class="key">X</button>
+          <button class="key">C</button>
+          <button class="key">V</button>
+          <button class="key">B</button>
+          <button class="key">N</button>
+          <button class="key">M</button>
+          <button class="key wide" data-key="BACKSPACE">⌫</button>
+        </div>
       </div>
-    </div>
+
+      <div id="end-panel" class="hidden">
+        <p class="end-title">Umemaliza Neno la Leo!!</p>
+        <p class="end-subtitle">Rudi kesho kwa fumbo jipya</p>
+
+        <div class="end-actions">
+          <button class="future-btn">Practice Mode</button> 
+          <button class="future-btn">More Games</button>
+        </div>
+      </div>
+
+      <div id="stats-popup" class="popup hidden">
+        <div class="popup-content">
+          <h2 class="popup-title">Takwimu Zako</h2>
+
+          <div class="stats-summary">
+            <div>
+              <p class="stat-label">Current Streak</p>
+              <p class="stat-value" id="current-streak">0</p>
+            </div>
+            <div>
+              <p class="stat-label">Longest Streak</p>
+              <p class="stat-value" id="max-streak">0</p>
+            </div>
+          </div>
+
+          <div class="distribution">
+            <p class="dist-title">Guess Distribution</p>
+            <div id="distribution-bars"></div>
+          </div>
+
+          <button id="stats-close">Funga</button>
+        </div>
+      </div>
 
 
-  </main>
+    </main>
+  </div>
+
+
   <div id="win-popup" class="popup hidden">
     <div class="popup-content">
       <h2 class="popup-title">Hongera! </h2>
@@ -127,50 +135,34 @@
 
   <!--Landing page-->
 
-  <div id="landing-overlay" class="overlay">
-    <div class="overlay-content">
+ <div id="landing-overlay">
+  <div class="landing-card">
+    
+    <h2 id="landing-title" class="landing-title">Karibu NenoLab</h2>
+    <p id="landing-subtitle" class="landing-subtitle">
+      Je, unaweza kulipata neno la leo?
+    </p>
 
-      <h2 id="landing-title" class="overlay-title">Karibu NenoLab </h2>
-      <p id="landing-subtitle" class="overlay-subtitle">Je, unaweza kulipata neno la leo?</p>
-
-      <!-- Example board (shown conditionally) -->
-      <div id="example-section">
-        <div class="example-board">
-          <div class="example-row">
-            <span class="ex correct">N</span>
-            <span class="ex present">E</span>
-            <span class="ex absent">N</span>
-            <span class="ex absent">O</span>
-            <span class="ex absent">A</span>
-          </div>
-        </div>
-
-        <div class="legend">
-          <div class="legend-item">
-            <span class="legend-box correct"></span>
-            <span>Sahihi</span>
-          </div>
-          <div class="legend-item">
-            <span class="legend-box present"></span>
-            <span>Ipo</span>
-          </div>
-          <div class="legend-item">
-            <span class="legend-box absent"></span>
-            <span>Haipo</span>
-          </div>
-        </div>
+    <div id="example-section" class="example-section">
+      <div class="example-row">
+        <div class="example-tile correct">F</div>
+        <div class="example-tile present">U</div>
+        <div class="example-tile absent">M</div>
+        <div class="example-tile absent">B</div>
+        <div class="example-tile absent">O</div>
       </div>
-
-      <!-- User identity (shown for returning users) -->
-      <p id="user-identity" class="user-identity hidden"></p>
-
-      <div class="overlay-actions">
-        <button id="how-to-play-btn" class="secondary-btn">Jinsi ya Kucheza</button>
-        <button id="start-game-btn" class="primary-btn">Anza</button>
-      </div>
-
     </div>
+
+    <button id="how-to-play-btn" class="landing-btn secondary-btn">
+      Jinsi ya Kucheza
+    </button>
+
+    <button id="start-game-btn" class="landing-btn primary-btn">
+      Anza
+    </button>
+
   </div>
+</div>
 
   <div id="how-to-play-popup" class="popup hidden">
     <div class="popup-content">
@@ -203,6 +195,7 @@
             <input type="checkbox" id="dark-toggle">
             <span class="slider"></span>
           </label>
+          
         </div>
 
         <div class="setting-item">
@@ -224,12 +217,18 @@
         <button id="settings-close" class="settings-close">Funga</button>
       </div>
     </div>
-
-
-
-
-    <script src="words.js"></script>
-    <script src="script.js"></script>
+    
+  <script defer src="js/globals.js"></script>
+  <script defer src="words.js"></script>
+  <script defer src="js/dailyWord.js"></script>
+  <script defer src="js/stats.js"></script>
+  <script defer src="js/board.js"></script>
+  <script defer src="js/gameLogic.js"></script>
+  <script defer src="js/popups.js"></script>
+  <script defer src="js/landing.js"></script>
+  <script defer src="js/input.js"></script>
+  <script defer src="js/theme.js"></script>
+  <script defer src="js/main.js"></script>
 
 </body>
 </html>

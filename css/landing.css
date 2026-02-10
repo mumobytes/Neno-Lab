@@ -1,0 +1,103 @@
+/* OVERLAY BACKDROP */
+#landing-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+#landing-overlay.hidden {
+  display: none !important;
+}
+
+
+/* LANDING CARD */
+.landing-card {
+  background: var(--bg-color);
+  color: var(--text-color);
+  width: 90%;
+  max-width: 420px;
+  padding: 28px 22px;
+  border-radius: 16px;
+  text-align: center;
+  border: 1px solid var(--tile-border);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+  animation: popUp 0.45s ease-out forwards;
+}
+
+.landing-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.landing-subtitle {
+  font-size: 1rem;
+  opacity: 0.75;
+  margin-bottom: 20px;
+}
+
+/* BUTTONS */
+.landing-btn {
+  width: 100%;
+  padding: 12px 0;
+  margin-top: 12px;
+  border-radius: 10px;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.primary-btn {
+  background: #14b8a6;
+  color: white;
+}
+
+.secondary-btn {
+  background: var(--key-bg);
+  color: var(--text-color);
+}
+
+/* EXAMPLE SECTION */
+.example-section {
+  margin: 16px auto;
+}
+
+.example-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.example-tile {
+  width: 40px;
+  height: 40px;
+  background: var(--tile-border);
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.example-tile.correct { background: #14b8a6; color: white; border-color: #14b8a6; }
+.example-tile.present { background: #eab308; color: white; border-color: #eab308; }
+.example-tile.absent  { background: #475569; color: white; border-color: #475569; }
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes popUp {
+  from { transform: translateY(20px) scale(0.95); opacity: 0; }
+  to   { transform: translateY(0) scale(1); opacity: 1; }
+}

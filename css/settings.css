@@ -1,0 +1,18 @@
+.settings {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+  pointer-events: none; /* block clicks by default */
+}
+
+.settings:not(.hidden) {
+  pointer-events: auto; /* only clickable when open */
+}
+
+.settings.hidden {
+  opacity: 0; /* visually hidden */
+}
