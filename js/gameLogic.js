@@ -17,21 +17,27 @@ document.addEventListener("DOMContentLoaded", () => {
     key.classList.add(status);
   }
 
-  window.checkGuess = function(guess) {
+  window.checkGuess = function(guess, restoring = false) {
+
     const secretLetters = secretWord.split("");
     const guessLetters = guess.split("");
 
     const rowTiles = document.querySelectorAll(`.tile[data-row='${currentRow}']`);
 
-    rowTiles.forEach((tile, i) => {
-      setTimeout(() => {
-        tile.classList.add("flip");
-        setTimeout(() => tile.classList.remove("flip"), 200);
-      }, i * 150);
-    });
+    if (!restoring) {
+      rowTiles.forEach((tile, i) => {
+        setTimeout(() => {
+          tile.classList.add("flip");
+          setTimeout(() => tile.classList.remove("flip"), 200);
+        }, i * 150);
+      });
+    }
+
 
     const letterCount = {};
     secretLetters.forEach(l => (letterCount[l] = (letterCount[l] || 0) + 1));
+
+    const delay = restoring ? 0 : rowTiles.length * 150;
 
     setTimeout(() => {
       guessLetters.forEach((l, i) => {
@@ -55,10 +61,11 @@ document.addEventListener("DOMContentLoaded", () => {
           colorKey(l, "absent");
         }
       });
-    }, rowTiles.length * 150);
+    }, delay);
   };
 
   window.submitGuess = function() {
+
     if (window.gameOver) return;
 
     if (currentCol < COLS) {
@@ -75,33 +82,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
     checkGuess(guess.toUpperCase());
 
-    const stats = getStats();
+    // Save progress to session
+    window.updateSession("in-progress");
 
+    // --- WIN ---
     if (guess.toUpperCase() === secretWord) {
-      window.gameOver = true;
-      stats.gamesPlayed++;
-      stats.wins++;
-      stats.currentStreak++;
-      stats.maxStreak = Math.max(stats.maxStreak, stats.currentStreak);
-      stats.distribution[currentRow]++;
-      saveStats(stats);
 
-      showWinPopup(stats.currentStreak);
-      showStatsPopup(stats);
+      window.gameOver = true;
+
+      // attempts = currentRow (0-based index)
+      updateStatsAfterGame(true, currentRow);
+
+      window.updateSession("won");
+
+      showWinPopup(getStats().currentStreak);
+      showStatsPopup();
+
       return;
     }
 
+    // Move to next row
     currentRow++;
     currentCol = 0;
 
+    window.updateSession("in-progress");
+
+    // --- LOSS ---
     if (currentRow === ROWS) {
+
       window.gameOver = true;
-      stats.gamesPlayed++;
-      stats.currentStreak = 0;
-      saveStats(stats);
-      showStatsPopup(stats);
+
+      updateStatsAfterGame(false);
+
+      window.updateSession("lost");
+
+      showStatsPopup();
       showMessage(`Umeshindwa. Neno lilikuwa: ${secretWord}`, null);
     }
+
   };
+
 
 });

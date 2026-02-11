@@ -17,7 +17,7 @@ const WORDS = [
   "funzo", "fursa", "futia",  "fyata", "fyeka", "ganda", "ganga",
   "gango", "genge", "geuka", "geuza", "ghafi", "ghali", "ghati", "gombe",
   "gombo", "gonga", "gunda", "gundi", "gunia", "gunzi", "hiana", "hiari",
-  "hicho", "huria", "hukmu", "ibada", "idadi", "idhaa",
+  "hicho", "huria", "hukmu", "hatia", "ibada", "idadi", "idhaa",
   "igiza", "ijara", "ijayo", "ikulu", "ilani", "imamu", "imani", "imara",
   "inama", "ingia", "inika", "inuka", "itika", "itiko", "jalia", "jamaa",
   "jamii", "jambo", "jamvi", "janga", "jasho", "jazia", "jazwa", "jembe",
